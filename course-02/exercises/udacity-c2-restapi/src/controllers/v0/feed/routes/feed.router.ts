@@ -21,9 +21,8 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/:id', async (req:Request, res:Response) => {
     let { id } = req.params;
     if( !id ) {
-        res.status(400).send('Please put and id')
+        res.status(400).send('Please put an id')
     }
-    console.log(typeof id)
     const items = await FeedItem.findByPk(id);
     res.send(items)
 }
