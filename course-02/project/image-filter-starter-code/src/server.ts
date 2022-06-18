@@ -26,6 +26,24 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //    image_url: URL of a publicly accessible image
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
+  app.get('/filteredimage/', async (req,res)=> {
+    const {image_url} = req.query;
+    console.log(image_url)
+    if (!image_url) {
+      res.status(422)
+         .send('please put a valid image_url');
+    };
+    try{
+    let image_path: string = await filterImageFromURL(image_url);
+    res.status(200).sendFile(image_path);
+    setTimeout(()=>{
+      deleteLocalFiles([image_path]);
+    },1000)
+      }catch (error){
+        console.log('error: ' + error.message)
+      }
+
+  })
 
   /**************************************************************************** */
 
