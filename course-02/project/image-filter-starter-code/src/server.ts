@@ -30,7 +30,6 @@ import {requireAuth} from './auth/auth.router'
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
   app.get('/filteredimage/', async (req:Request,res:Response)=> {
     const {image_url} = req.query;
-    console.log(image_url)
     if (!image_url) {
       res.status(422)
          .send('please put a valid image_url');
@@ -42,7 +41,7 @@ import {requireAuth} from './auth/auth.router'
       deleteLocalFiles([image_path]);
     },1000)
       }catch (error){
-        console.log('error: ' + error.message)
+        console.log('error: ' + error)
       }
 
   })
@@ -62,7 +61,7 @@ import {requireAuth} from './auth/auth.router'
       deleteLocalFiles([image_path]);
     },1000)
       }catch (error){
-        console.log('error: ' + error.message)
+        console.log('error: ' + error)
       }
 
   })
