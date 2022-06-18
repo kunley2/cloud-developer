@@ -12,11 +12,11 @@ export const config = {
   "jwt": {
     "secret": process.env.JWT_SECRET,
   },
-  "prod": {
-    "username": "",
-    "password": "",
-    "database": "udagram_prod",
-    "host": "",
-    "dialect": "postgres"
-  }
-}
+  prod: {
+    username: '',
+    password: '',
+    database: 'udagram_prod',
+    host: '',
+    dialect: 'postgres',
+  },
+};
