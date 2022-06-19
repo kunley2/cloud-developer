@@ -13,11 +13,8 @@ function generateJwt(){
 }
 
 export function requireAuth(req:Request, res:Response, next:NextFunction) {
-    const j_token = jwt.sign({user:'kunle'},config.jwt.secret,{expiresIn:'5m'},(err,decoded)=>{
-        // console.log(err)
-        res.send({token:j_token, user:decoded})
-    })
-    console.log(j_token)
+    jwt.sign({user:'kunle'},config.jwt.secret,{expiresIn:'5m'}        
+    )
     if (!req.headers || !req.headers.authorization){
         return res.status(401).send('you do not have authorization headers')
     }
