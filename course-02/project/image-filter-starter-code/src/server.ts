@@ -1,6 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {Response,Request} from 'express';
+import {requireAuth} from './auth/auth.router'
+import 
 
 (async () => {
 
@@ -26,6 +29,42 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //    image_url: URL of a publicly accessible image
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
+  app.get('/filteredimage/', async (req:Request,res:Response)=> {
+    let {image_url}: {image_url:string} = req.query;
+    if (!image_url) {
+      res.status(422)
+         .send('please put a valid image_url');
+    };
+    try{
+    let image_path: string = await filterImageFromURL(image_url);
+    res.status(200).sendFile(image_path,async ()=> {
+      await deleteLocalFiles([image_path]);
+    });
+    }catch (error){
+      console.log('error: ' + error)
+      }
+
+  })
+  // trying authorization
+  app.get('/auth/filteredimage/',requireAuth,
+   async (req:Request,res:Response)=> {
+    console.log('given access')
+    let {image_url}: {image_url:string}  = req.query;
+    console.log(image_url)
+    if (!image_url) {
+      res.status(422)
+         .send('please put a valid image_url');
+    };
+    try{
+    let image_path: string = await filterImageFromURL(image_url);
+    res.status(200).sendFile(image_path, async ()=>{
+      await deleteLocalFiles([image_path]);
+    });
+    }catch (error){
+      console.log('error: ' + error)
+    }
+
+  })
 
   /**************************************************************************** */
 
