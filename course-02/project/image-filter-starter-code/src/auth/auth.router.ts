@@ -6,25 +6,24 @@ import {config} from '../config/config'
 
 const router: Router = Router();
 
-function generateJwt(){
-    return jwt.sign({},config.jwt.secret,(err)=>{
+function generateJwt(userMail){
+    return jwt.sign(userMail.json(),config.jwt.secret,(err)=>{
         console.log(err)
     })
 }
 
 export function requireAuth(req:Request, res:Response, next:NextFunction) {
-    jwt.sign({user:'kunle'},config.jwt.secret,{expiresIn:'5m'}        
-    )
+    
+    
     if (!req.headers || !req.headers.authorization){
         return res.status(401).send('you do not have authorization headers')
     }
     const token_bearer = req.headers.authorization.split(' ');
-    
-    if (token_bearer.length !=1){
+    if (token_bearer.length !=2){
         return res.status(401).send('malformed token');
     }
-    let token = token_bearer[0];
-    // console.log(token)
+    const token = token_bearer[1];
+    console.log(token)
     return jwt.verify(token, config.jwt.secret,(err,decoded)=>{
         console.log('decoded: ' + decoded)
         if (err) {
@@ -37,5 +36,23 @@ export function requireAuth(req:Request, res:Response, next:NextFunction) {
     });
 
 }
+
+router.post('/login',async (req:Request, res:Response)=> {
+    let email: string =req.body.email;
+    let password: string = req.body.password;
+    if (!email || !password) {
+        return res.status(401).send('please put an email and a password');
+    } 
+    const jwt_token = generateJwt(email);
+    return res.status(200).send({auth:true, token:jwt_token})
+})
+
+router.get('/me',
+requireAuth,
+async (req,res)=>{
+    return res.status(200).send({ auth: true, message: 'Authenticated.' });
+})
+
+export const authRouter:Router = router;
 
 

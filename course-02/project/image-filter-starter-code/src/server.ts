@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 import {Response,Request} from 'express';
 import {requireAuth} from './auth/auth.router'
+import 
 
 (async () => {
 
@@ -46,7 +47,8 @@ import {requireAuth} from './auth/auth.router'
   })
   // trying authorization
   app.get('/auth/filteredimage/',requireAuth,
-   async (req,res)=> {
+   async (req:Request,res:Response)=> {
+    console.log('given access')
     let {image_url}: {image_url:string}  = req.query;
     console.log(image_url)
     if (!image_url) {
