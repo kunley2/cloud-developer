@@ -6,10 +6,9 @@ import {config} from '../config/config'
 
 const router: Router = Router();
 
-function generateJwt(userMail){
-    return jwt.sign(userMail.json(),config.jwt.secret,(err)=>{
-        console.log(err)
-    })
+function generateJwt(userName:string) {
+    return jwt.sign({"user": userName},config.jwt.secret,
+        {expiresIn: 900});
 }
 
 export function requireAuth(req:Request, res:Response, next:NextFunction) {
@@ -38,13 +37,19 @@ export function requireAuth(req:Request, res:Response, next:NextFunction) {
 }
 
 router.post('/login',async (req:Request, res:Response)=> {
-    let email: string =req.body.email;
+    let username: string =req.body.username;
     let password: string = req.body.password;
-    if (!email || !password) {
+    // console.log(email)
+    if (!username || !password) {
         return res.status(401).send('please put an email and a password');
     } 
-    const jwt_token = generateJwt(email);
-    return res.status(200).send({auth:true, token:jwt_token})
+    try{
+        const jwt_token = await generateJwt(username);
+        return res.status(200).send({auth:true, token:jwt_token});
+    }catch (err){
+        console.log(err)
+    }
+    
 })
 
 router.get('/me',

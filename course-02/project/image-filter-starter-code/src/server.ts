@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 import {Response,Request} from 'express';
 import {requireAuth} from './auth/auth.router'
-import 
+import {authRouter} from './auth/auth.router'
 
 (async () => {
 
@@ -65,6 +65,8 @@ import
     }
 
   })
+
+  app.use('/',authRouter)
 
   /**************************************************************************** */
 
