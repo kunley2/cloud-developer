@@ -25,6 +25,16 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   }
 
   // TODO: Create an image
+  const parsedBody = JSON.parse(event.body)
+  const item = {
+    id: ,
+    ...parsedBody
+  }
+  
+  await docClient.put({
+    TableName: imagesTable,
+    Item: item
+  }).promise()
 
   return {
     statusCode: 201,
