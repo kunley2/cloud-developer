@@ -1,0 +1,25 @@
+
+export const authConfig = {
+    domain: "dev-u5nhzm4g.us.auth0.com",
+    certificate: `-----BEGIN CERTIFICATE-----
+    MIIDDTCCAfWgAwIBAgIJbfXWpAbF5FfJMA0GCSqGSIb3DQEBCwUAMCQxIjAgBgNV
+    BAMTGWRldi11NW5oem00Zy51cy5hdXRoMC5jb20wHhcNMjIwODA4MjEwMzExWhcN
+    MzYwNDE2MjEwMzExWjAkMSIwIAYDVQQDExlkZXYtdTVuaHptNGcudXMuYXV0aDAu
+    Y29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqTEwvJOfioc0c1Mz
+    t6PtqjXEB5I9MgZxjqXzYLiycN8Al74ZxkNniiPIvxWPj/LH8DaNBg0KZtUCrVzr
+    E38kk8JwbN/hqavx18wQIVAVcKlpiwx3uTuLJjcywy64VE+9J7O3/gCS3AEWc4yk
+    jKdWccgArDLKUAtlmcHabd/FlVi9OM798Hh7WOihmpiuAon32ocgl39ZxY0UFqdY
+    o6gd0SBVVYSP6mUEq7RiQev6f9dTV9B+8JqsYe5shkkVdBXQxwu78bGhoXX7HYvo
+    qWECOmUQ/+47cCWDwrUhQaVee7A0xHgZrDkZOuXhX7bPPIJGMp0RKuMKw449sD4a
+    lxNgGQIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSIMA2U7Rkq
+    OGPIDcvh1hwLdGtSdDAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEB
+    AJuVtoFHtLFIz1z74XpgMXypOl9S/1hPCYxk1jrEPKNoqRfZjhaWhDdqJK9JsQtn
+    bx295Cniyaq5doLlMBcwk/KnDV/4Gg4q2eXyiooJFmOYh/ANAHablYOivlEIUruM
+    Psg4YqLdmMBbwkXB29lgh75IK6f4w7O4MgmNd7V5/Ss42MWpKdRrtZ+aT+NKm/bA
+    qWWdWb69UU1GRBCMEJFx/CJS69nT2wtyVxMWzxoxueK4vaR934ftwaF6j+6ujz5O
+    t2NiQAfbZQ37TLgt4JuAHp9+kKKxS5cmswPXPi3c3nM65d8v0+MKYi6lEGA9rkti
+    CwRR/tReb0WIzIgRXdGpGCc=
+    -----END CERTIFICATE-----`,
+    clientId: "r4mQJK1cB95d4jeMPnxT9H1IIcCK4mjf",
+    callbackUrl: "http://localhost:3000/callback"
+}
