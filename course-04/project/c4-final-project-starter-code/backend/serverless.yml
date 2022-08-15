@@ -25,7 +25,7 @@ provider:
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-k123-${self:provider.stage}
+    ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-k456-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     IS_OFFLINE: true
 
@@ -61,8 +61,10 @@ functions:
     iamRoleStatementsInherit: true
     iamRoleStatements: 
       - Effect: Allow
-        Action: dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self.provider.region}:*:table/${self.provider.environment.TODOS_TABLE}
+        Action: 
+          - dynamodb:GetItem
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
   # TODO: Configure this function - 
   # Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
@@ -140,6 +142,7 @@ functions:
       - Effect: Allow
         Action:
         - s3:PutObject
+        - s3:GetObject
         Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
 
 resources:
