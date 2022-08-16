@@ -56,7 +56,6 @@ export const handler = async (
 
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
-  console.log('hello')
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
 
   // TODO: Implement token verification
@@ -66,9 +65,17 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const requestedJwk = Axios.get(jwksUrl)
   console.log(requestedJwk)
   
-  const returnedToken = (await requestedJwk).data.keys.find(key=>key.kid)  
-  logger.info('gotten the kid from jwks',{key: returnedToken})
-  return  verify(jwt.header.kid, returnedToken, { algorithms: ['RS256'] }) as JwtPayload
+  try{
+    const returnedToken = (await requestedJwk).data.keys.find(key=>key.kid[0] && key.x5c).map(key=>{return{kid:key.kid,publicKey:key.x5c[0]};})  
+    logger.info('gotten the kid from jwks',{key: returnedToken})
+    if (!jwt.header.kid === returnedToken.kid){
+      logger.info('Invalid verification')
+    }
+    const certificate = certToPEM(returnedToken.publicKey)
+    return  verify(token, certificate, { algorithms: ['RS256'] }) as JwtPayload
+  } catch(error) {
+    console.log(error.message)
+  }
 }
 
 function getToken(authHeader: string): string {
@@ -77,8 +84,14 @@ function getToken(authHeader: string): string {
   if (!authHeader.toLowerCase().startsWith('bearer '))
     throw new Error('Invalid authentication header')
 
-  const split = authHeader.split(' ')
-  const token = split[1]
+  const split = authHeader.split(' ');
+  const token = split[1];
 
   return token
 }
+function certToPEM(cert) {
+  cert = cert.match(/.{1,64}/g).join('\n');
+  cert = `-----BEGIN CERTIFICATE-----\n${cert}\n-----END CERTIFICATE-----\n`;
+  return cert;
+}
+
