@@ -11,18 +11,18 @@ export const handler = middy(
     const newTodo: CreateTodoRequest = JSON.parse(event.body)
     // TODO: Implement creating a new TODO item
     const userId = getUserId(event)
-    const item = createTodo(newTodo,userId)
+    const item = await createTodo(newTodo,userId)
 
     return {
       statusCode: 201,
-      body: JSON.stringify(item)
+      body: JSON.stringify({item})
     }
   })
 
 handler
-.use(httpErrorHandler())
-.use(
-  cors({
-    credentials: true
-  })
-)
+  .use(httpErrorHandler())
+  .use(
+    cors({
+      credentials: true
+    })
+  )

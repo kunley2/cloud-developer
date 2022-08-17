@@ -18,22 +18,26 @@ export async function createTodo(createTodoRequest:CreateTodoRequest,userId:stri
     const itemId = uuid.v4()
     const done = false
     logger.info('gotten the itemId for create',{key:itemId})
-    return await todosAccess.createTodo({
+    const values = {
         todoId: itemId,
         userId: userId,
         name: createTodoRequest.name,
         dueDate: createTodoRequest.dueDate,
         done: done,
         createdAt: new Date().toISOString()
-    })
+    };
+    logger.info('gotten the create value',{key:todosAccess.createTodo(values)})
+    return await todosAccess.createTodo(values)
 }
 
-export async function getTodosForUser(userId: string){
-    return todosAccess.getTodo(userId)
+export async function getTodosForUser(userId: string):Promise<TodoItem[]>{
+    logger.info('gotten the get value',{key:todosAccess.getTodo(userId)})
+    return await todosAccess.getTodo(userId)
+    
 }
 
 export async function updateTodo(userId:string, updateTodoRequest:UpdateTodoRequest,todoId: string) {
-    return todosAccess.updateTodo(userId, updateTodoRequest,todoId)
+    return await todosAccess.updateTodo(userId, updateTodoRequest,todoId)
 }
 
 export async function deleteTodo(userId: string, todoId: string){

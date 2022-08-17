@@ -66,12 +66,12 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   console.log(requestedJwk)
   
   try{
-    const returnedToken = (await requestedJwk).data.keys.find(key=>key.kid[0] && key.x5c).map(key=>{return{kid:key.kid,publicKey:key.x5c[0]};})  
-    logger.info('gotten the kid from jwks',{key: returnedToken})
+    const returnedToken = (await requestedJwk).data.keys.find(key=>key.kid[0] && key.x5c);  
+    logger.info('gotten the kid from jwks',{key: returnedToken});
     if (!jwt.header.kid === returnedToken.kid){
       logger.info('Invalid verification')
     }
-    const certificate = certToPEM(returnedToken.publicKey)
+    const certificate = certToPEM(returnedToken.x5c)
     return  verify(token, certificate, { algorithms: ['RS256'] }) as JwtPayload
   } catch(error) {
     console.log(error.message)
@@ -90,7 +90,6 @@ function getToken(authHeader: string): string {
   return token
 }
 function certToPEM(cert) {
-  cert = cert.match(/.{1,64}/g).join('\n');
   cert = `-----BEGIN CERTIFICATE-----\n${cert}\n-----END CERTIFICATE-----\n`;
   return cert;
 }

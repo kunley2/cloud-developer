@@ -10,7 +10,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs12.x
   lambdaHashingVersion: '20201221'
 
   stage: ${opt:stage, 'dev'}
@@ -27,7 +27,7 @@ provider:
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
     ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-k456-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    IS_OFFLINE: true
+    IS_OFFLINE: false
 
   logs:
     # Enable API Gateway logs
