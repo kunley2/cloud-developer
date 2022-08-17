@@ -41,9 +41,10 @@ export async function updateTodo(userId:string, updateTodoRequest:UpdateTodoRequ
 }
 
 export async function deleteTodo(userId: string, todoId: string){
-    return todosAccess.deleteTodo(userId, todoId)
+    return await todosAccess.deleteTodo(userId, todoId)
 }
 
-export async function createAttachmentPresignedUrl(userId: string,todoId: string){
-    return AttachmentUtils(userId,todoId)
+export async function createAttachmentPresignedUrl(todoId: string){
+    logger.info('gotten signed url',{url:await AttachmentUtils(todoId)})
+    return await AttachmentUtils(todoId)
 }
