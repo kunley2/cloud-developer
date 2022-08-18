@@ -7,6 +7,8 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
 
 provider:
   name: aws
@@ -41,6 +43,22 @@ provider:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
           Resource: "*"
+
+custom:
+  topicName: todoTopic-${self:provider.stage}
+  documentation:
+  api:
+    info:
+      version: v1.0.0
+      title: Udagram API
+      description: Serverless application for images sharing
+  models:
+    - name: CreateRequest
+      contentType: application/json
+      schema: ${file(models/create-todo-model.json)}
+    - name: UpdateRequest
+      contentType: application/json
+      schema: ${file(models/update-todo-model.json)}
 
 
 functions:
@@ -78,6 +96,12 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new group
+            description: Create a new group
+            requestModels:
+              'application/json': CreateRequest
           request:
             schemas:
               application/json: ${file(models/create-todo-model.json)}
@@ -98,6 +122,12 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new group
+            description: Create a new group
+            requestModels:
+              'application/json': UpdateRequest
           request:
             schemas:
               application/json: ${file(models/update-todo-model.json)}
@@ -225,3 +255,13 @@ resources:
               Action: 's3:GetObject'
               Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
+
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: true

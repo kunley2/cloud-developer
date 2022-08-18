@@ -40,9 +40,6 @@ export class TodosAccess{
                     ':user': userId
                 },
                 KeyConditionExpression:'userId = :user'
-                // Key: {
-                //     userId: userId
-                // }
             }).promise()
             // if(result.Items.length ==0){
             //    const item = []
